@@ -1,10 +1,10 @@
 import React from "react";
-import { SignIn } from "./components";
+import { TravelPlanner } from "./components";
 
 export default function Home() {
 	return (
 		<main>
-			<SignIn />
+			<TravelPlanner/>
 		</main>
 	);
 }

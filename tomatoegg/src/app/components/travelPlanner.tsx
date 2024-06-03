@@ -39,7 +39,8 @@ const TravelPlanner = () => {
   const fetchKnownLocation = async () => {
     try {
       const response = await axios.get(
-        `http://localhost:8000/travel/known?endLocation=${destination}&month=${month}&auth=${accessCode}`
+        `http://localhost:8000/travel/known?endLocation=${destination}&month=${month}`,
+        { headers: { Authorization: accessCode } }
       );
       setResponse(response.data);
     } catch (err: any) {
@@ -56,7 +57,8 @@ const TravelPlanner = () => {
   const fetchUnknownLocation = async () => {
     try {
       const response = await axios.get(
-        `http://localhost:8000/travel/unknown?startLocation=${startLocation}&type=${travelType}&month=${month}&auth=${accessCode}`
+        `http://localhost:8000/travel/unknown?startLocation=${startLocation}&type=${travelType}&month=${month}`,
+        { headers: { Authorization: accessCode } }
       );
 
       setResponse(response.data);

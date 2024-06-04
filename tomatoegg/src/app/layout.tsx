@@ -6,22 +6,22 @@ import { Navbar, Footer } from "./components";
 const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
-	title: "TomatoEgg",
-	description: "Travel Web App codenamed tomatoEgg",
+  title: "TomatoEgg",
+  description: "Travel Web App codenamed tomatoEgg",
 };
 
 export default function RootLayout({
-	children,
+  children,
 }: Readonly<{
-	children: React.ReactNode;
+  children: React.ReactNode;
 }>) {
-	return (
-		<html lang="en">
-			<body className={inter.className}>
-				<Navbar />
-				{children}
-				<Footer />
-			</body>
-		</html>
-	);
+  return (
+    <html lang="en">
+      <body className={inter.className}>
+        {/* <Navbar /> */}
+        {children}
+        {/* <Footer /> */}
+      </body>
+    </html>
+  );
 }

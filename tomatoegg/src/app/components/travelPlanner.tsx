@@ -3,12 +3,33 @@ import axios from "axios";
 import React, { useState } from "react";
 import { Spinner } from "./spinner/Spinner";
 
+const months = [
+  "January",
+  "February",
+  "March",
+  "April",
+  "May",
+  "June",
+  "July",
+  "August",
+  "September",
+  "October",
+  "November",
+  "December",
+];
+
+const tripTypes = [
+  { label: "Road Trip", value: "roadtrip" },
+  { label: "Domestic", value: "domestic" },
+  { label: "International", value: "international" },
+];
+
 const TravelPlanner = () => {
   const [selectKnownLocation, setSelectKnownLocation] = useState(true);
   const [destination, setDestination] = useState("");
   const [startLocation, setStartLocation] = useState("");
-  const [travelType, setTravelType] = useState("");
-  const [month, setMonth] = useState("");
+  const [travelType, setTravelType] = useState("roadtrip");
+  const [month, setMonth] = useState("January");
   const [accessCode, setAccessCode] = useState("");
   const [error, setError] = useState("");
   const [activities, setActivities] = useState([]);
@@ -17,10 +38,10 @@ const TravelPlanner = () => {
 
   const handleLocationClick = (value: boolean) => {
     setSelectKnownLocation(value);
-    setDestination("");
-    setStartLocation("");
-    setTravelType("");
-    setMonth("");
+    // setDestination("");
+    // setStartLocation("");
+    // setTravelType("");
+    // setMonth("");
   };
 
   const submit = () => {
@@ -35,6 +56,7 @@ const TravelPlanner = () => {
       }
     } else {
       if (!startLocation || !travelType || !month) {
+        setError("Missing parameters");
       } else {
         fetchUnknownLocation();
       }
@@ -95,9 +117,7 @@ const TravelPlanner = () => {
           <div className="flex border-b">
             <div className="-mb-px mr-1 w-full">
               <button
-                className={`bg-gray-100 inline-block py-2 px-4 w-full border-black border rounded-tl rounded-tr ${
-                  selectKnownLocation ? "border-b-[#F3F4F6]" : ""
-                }`}
+                className={selectKnownLocation ? "tab-active" : "tab-inactive"}
                 onClick={() => handleLocationClick(true)}
               >
                 Known Location
@@ -105,9 +125,7 @@ const TravelPlanner = () => {
             </div>
             <div className="-mb-px w-full">
               <button
-                className={`bg-gray-100 inline-block py-2 px-4 w-full border-black border rounded-tl rounded-tr ${
-                  selectKnownLocation ? "" : "border-b-[#F3F4F6]"
-                }`}
+                className={selectKnownLocation ? "tab-inactive" : "tab-active"}
                 onClick={() => handleLocationClick(false)}
               >
                 Unknown Location
@@ -139,13 +157,17 @@ const TravelPlanner = () => {
                 </div>
                 <div className="w-full md:w-1/2 lg:w-1/2 xl:w-1/2 flex justify-center items-center pt-5 bg-gray-100">
                   <div className="w-[150px] bg-gray-100">Month:</div>
-                  <input
+                  <select
                     className="w-[150px] py-1 px-3 border rounded focus:outline-none bg-white border-black"
-                    type="text"
-                    placeholder="May"
                     value={month}
                     onChange={(e) => setMonth(e.target.value)}
-                  />
+                  >
+                    {months.map((m) => (
+                      <option key={m} value={m}>
+                        {m}
+                      </option>
+                    ))}
+                  </select>
                 </div>
                 <div className="w-full md:w-1/2 lg:w-1/2 xl:w-1/2 flex justify-center items-center pt-5 bg-gray-100">
                   <div className="w-[150px] bg-gray-100">Travelers:</div>
@@ -172,45 +194,31 @@ const TravelPlanner = () => {
                 </div>
                 <div className="w-full md:w-1/2 lg:w-1/2 xl:w-1/2 flex justify-center items-center pt-5 bg-gray-100">
                   <div className="w-[150px] bg-gray-100">Month:</div>
-                  <input
+                  <select
                     className="w-[150px] py-1 px-3 border rounded focus:outline-none bg-white border-black"
-                    type="text"
-                    placeholder="May"
                     value={month}
                     onChange={(e) => setMonth(e.target.value)}
-                  />
+                  >
+                    {months.map((m) => (
+                      <option key={m} value={m}>
+                        {m}
+                      </option>
+                    ))}
+                  </select>
                 </div>
-                <div className="w-full flex justify-center items-center pt-5 bg-gray-100">
-                  <label className="flex p-3 bg-gray-100">
-                    <input
-                      type="radio"
-                      name="travelType"
-                      value="domestic"
-                      checked={travelType == "domestic"}
-                      onChange={(e) => setTravelType(e.target.value)}
-                    />
-                    <span className="ml-3 bg-gray-100">Domestic</span>
-                  </label>
-                  <label className="flex p-3 bg-gray-100">
-                    <input
-                      type="radio"
-                      name="travelType"
-                      value="roadtrip"
-                      checked={travelType == "roadtrip"}
-                      onChange={(e) => setTravelType(e.target.value)}
-                    />
-                    <span className="ml-3 bg-gray-100">Road Trip</span>
-                  </label>
-                  <label className="flex p-3 bg-gray-100">
-                    <input
-                      type="radio"
-                      name="travelType"
-                      value="international"
-                      checked={travelType == "international"}
-                      onChange={(e) => setTravelType(e.target.value)}
-                    />
-                    <span className="ml-3 bg-gray-100">International</span>
-                  </label>
+                <div className="w-full md:w-1/2 lg:w-1/2 xl:w-1/2 flex justify-center items-center pt-5 bg-gray-100">
+                  <div className="w-[150px] bg-gray-100">Trip Type:</div>
+                  <select
+                    className="w-[150px] py-1 px-3 border rounded focus:outline-none bg-white border-black"
+                    value={travelType}
+                    onChange={(e) => setTravelType(e.target.value)}
+                  >
+                    {tripTypes.map((type) => (
+                      <option key={type.value} value={type.value}>
+                        {type.label}
+                      </option>
+                    ))}
+                  </select>
                 </div>
               </>
             )}
@@ -228,7 +236,7 @@ const TravelPlanner = () => {
             </div>
             <div className="w-full md:w-1/2  lg:w-1/2 xl:w-1/2 flex justify-center items-center pt-5 bg-gray-100">
               <button
-                className="w-[200px] lg:w-1/2 xl:w-1/2 py-2 px-4 rounded bg-black text-white font-bold border border-transparent hover:bg-white hover:text-black hover:border-black disabled:hover:bg-black disabled:hover:text-white disabled:hover:border-transparent"
+                className="btn-primary"
                 type="button"
                 onClick={() => submit()}
                 disabled={loading}

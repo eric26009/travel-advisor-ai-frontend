@@ -1,0 +1,37 @@
+.svg-container {
+  width: 100%;
+  height: 100%;
+  position: relative;
+}
+
+.wind {
+  /* Initial position */
+  transform: translateY(0);
+  /* Animation */
+  animation: floatWind 0.5s ease-in-out infinite alternate;
+}
+
+.airplane {
+  /* Initial position */
+  transform: translateX(0);
+  /* Animation */
+  animation: floatAirplane 0.5s ease-in-out infinite alternate;
+}
+
+@keyframes floatWind {
+  0% {
+    transform: translateY(0); /* Start position */
+  }
+  100% {
+    transform: translateY(-10px); /* End position */
+  }
+}
+
+@keyframes floatAirplane {
+  0% {
+    transform: translateX(0); /* Start position */
+  }
+  100% {
+    transform: translateX(-10px); /* End position */
+  }
+}

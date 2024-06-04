@@ -2,6 +2,8 @@
 import axios from "axios";
 import React, { useState } from "react";
 import { Spinner } from "./spinner/Spinner";
+import AirplaneImage from "./airplaneImage";
+import "./index.css";
 
 const months = [
   "January",
@@ -228,7 +230,7 @@ const TravelPlanner = () => {
               <div className="w-[150px] bg-gray-100">Access Code:</div>
               <input
                 className="w-[150px] py-1 px-3 border rounded focus:outline-none bg-white border-black"
-                type="text"
+                type="password"
                 placeholder="Code"
                 value={accessCode}
                 onChange={(e) => setAccessCode(e.target.value)}
@@ -248,6 +250,11 @@ const TravelPlanner = () => {
             {error && <span className="text-red-500">{error}</span>}
           </div>
         </div>
+        {loading && (
+          <div className="mx-auto w-3/12 h-3/12 ">
+            <AirplaneImage />
+          </div>
+        )}
         {activities && (
           <div className="w-full">
             {/*<pre>{JSON.stringify(response, null, 2)}</pre>*/}

@@ -2,7 +2,20 @@
 @tailwind components;
 @tailwind utilities;
 
-*{
-    margin: 0;
-    padding: 0;
+* {
+  margin: 0;
+  padding: 0;
+  background-color: rgb(248, 248, 241);
+}
+
+@layer components {
+  .btn-primary {
+    @apply w-[200px] lg:w-1/2 xl:w-1/2 py-2 px-4 rounded bg-black text-white font-bold border border-transparent hover:bg-white hover:text-black hover:border-black disabled:hover:bg-black disabled:hover:text-white disabled:hover:border-transparent;
+  }
+  .tab-inactive {
+    @apply bg-gray-100 inline-block py-2 px-4 w-full border-black border rounded-tl rounded-tr;
+  }
+  .tab-active {
+    @apply bg-gray-100 inline-block py-2 px-4 w-full border-black border rounded-tl rounded-tr border-b-[#F3F4F6];
+  }
 }

@@ -258,11 +258,11 @@ const TravelPlanner = () => {
         {activities && (
           <div className="w-full">
             {/*<pre>{JSON.stringify(response, null, 2)}</pre>*/}
-            {activities.map((activitie: any, idx) => {
+            {activities.map((activitie: any) => {
               return (
                 <div
                   className="flex flex-col border border-black rounded mx-8 mt-5 p-3 bg-gray-300"
-                  key={idx}
+                  key={activitie.id}
                 >
                   <div className="bg-gray-300 mt-1 flex w-full justify-between">
                     <div className="bg-gray-300 font-bold">
@@ -281,11 +281,11 @@ const TravelPlanner = () => {
         )}
         {destinations && (
           <div className="w-full">
-            {destinations.map((destination: any, idx) => {
+            {destinations.map((destination: any) => {
               return (
                 <div
                   className="flex flex-col border border-black rounded mx-8 mt-5 p-3 bg-gray-300"
-                  key={idx}
+                  key={destination.id}
                 >
                   <div className="bg-gray-300 mt-1 flex w-full">
                     <div className="bg-gray-300 font-bold">

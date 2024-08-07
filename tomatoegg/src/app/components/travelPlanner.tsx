@@ -19,8 +19,13 @@ import {
 } from "@/components/ui/select";
 
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-
 import { Button } from "@/components/ui/button";
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from "@/components/ui/tooltip";
 
 const months = [
   "January",
@@ -233,7 +238,28 @@ const TravelPlanner = () => {
             </TabsContent>
             <div className="mt-3 grid gap-3">
               <div className="grid w-full max-w-sm items-center gap-1.5">
-                <Label htmlFor="destination">Access Code</Label>
+                <div className="flex justify-start items-center gap-2">
+                  <Label htmlFor="destination">Access Code</Label>
+                  <TooltipProvider>
+                    <Tooltip delayDuration={200}>
+                      <TooltipTrigger>
+                        <i className="fa-regular fa-circle-question"></i>
+                      </TooltipTrigger>
+                      <TooltipContent side="bottom" avoidCollisions>
+                        <p>
+                          If you do not have an access code, send a message to{" "}
+                          <a
+                            href="https://www.linkedin.com/in/feldmaneric"
+                            target="_blank"
+                            className="font-bold hover:underline"
+                          >
+                            Eric Feldman
+                          </a>
+                        </p>
+                      </TooltipContent>
+                    </Tooltip>
+                  </TooltipProvider>
+                </div>
                 <Input
                   style={{ WebkitTextSecurity: "disc" }}
                   autoComplete="off"

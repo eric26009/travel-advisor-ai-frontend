@@ -8,8 +8,8 @@ import { Suspense } from "react";
 const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
-  title: "TomatoEgg",
-  description: "Travel Web App codenamed tomatoEgg",
+  title: "AI Travel Advisor",
+  description: "AI Travel Web App",
 };
 
 export default function RootLayout({

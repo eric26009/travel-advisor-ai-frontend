@@ -1,2 +1,3 @@
 # tomatoEgg
-Travel Web App codenamed tomatoEgg
+
+AI Travel Advisor Web App

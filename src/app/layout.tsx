@@ -19,11 +19,11 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en" className="dark">
-      <Script
-        src="https://kit.fontawesome.com/42d341f801.js"
-        crossOrigin="anonymous"
-      />
       <body className={inter.className}>
+        <Script
+          src="https://kit.fontawesome.com/42d341f801.js"
+          crossOrigin="anonymous"
+        />
         <Suspense fallback={<div>Loading...</div>}>
           <Navbar />
           {children}

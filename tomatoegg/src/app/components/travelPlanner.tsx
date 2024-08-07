@@ -7,6 +7,18 @@ import "./index.css";
 import { useRouter, useSearchParams } from "next/navigation";
 import Link from "next/link";
 
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+import { Button } from "@/components/ui/button";
+
 const months = [
   "January",
   "February",
@@ -115,82 +127,62 @@ const TravelPlanner = () => {
 
   return (
     <div>
-      <span className="flex justify-center text-3xl font-bold pb-5">
-        Travel Advisor AI
-      </span>
       <main className="items-center justify-center">
-        <div className="flex flex-col w-full px-8">
-          <div className="flex border-b">
-            <div className="-mb-px mr-1 w-full">
-              <Link
-                className={selectKnownLocation ? "tab-active" : "tab-inactive"}
-                href={{
-                  query: { type: "activity" },
-                }}
-              >
-                Known Location
-              </Link>
-            </div>
-            <div className="-mb-px w-full">
-              <Link
-                className={selectKnownLocation ? "tab-inactive" : "tab-active"}
-                href={{
-                  query: { type: "destination" },
-                }}
-              >
-                Unknown Location
-              </Link>
-            </div>
-          </div>
-          <div className="flex flex-wrap border-x border-black">
-            {selectKnownLocation ? (
-              <>
-                <div className="w-full md:w-1/2 lg:w-1/2 xl:w-1/2 flex justify-center items-center pt-5 bg-gray-100">
-                  <div className="w-[150px] bg-gray-100">Destination:</div>
-                  <input
-                    className="w-[150px] py-1 px-3 border rounded focus:outline-none bg-white border-black"
+        <div className="flex flex-col w-full px-8 justify-center items-center p-5">
+          <Tabs
+            value={selectKnownLocation ? "activity" : "destination"}
+            onValueChange={(val) => params.set}
+            className="w-[400px]"
+          >
+            <TabsList>
+              <TabsTrigger asChild value="activity">
+                <Link
+                  href={{
+                    query: { type: "activity" },
+                  }}
+                >
+                  AI Activity Advisor
+                </Link>
+              </TabsTrigger>
+              <TabsTrigger asChild value="destination">
+                <Link
+                  href={{
+                    query: { type: "destination" },
+                  }}
+                >
+                  AI Destination Advisor
+                </Link>
+              </TabsTrigger>
+            </TabsList>
+            <TabsContent value="activity">
+              <div className="grid gap-3">
+                <div className="grid w-full max-w-sm items-center gap-1.5">
+                  <Label htmlFor="destination">Destination</Label>
+                  <Input
                     type="text"
                     placeholder="Seattle"
                     value={destination}
                     onChange={(e) => setDestination(e.target.value)}
                   />
                 </div>
-                <div className="w-full md:w-1/2 lg:w-1/2 xl:w-1/2 flex justify-center items-center pt-5 bg-gray-100">
-                  <div className="w-[150px] bg-gray-100">Budget:</div>
-                  <input
-                    className="w-[150px] py-1 px-3 border rounded focus:outline-none bg-white border-black"
-                    type="text"
-                    placeholder="$$"
-                    //value={}
-                    //onChange={}
-                  />
+                <div className="grid w-full max-w-sm items-center gap-1.5">
+                  <Label htmlFor="month">Month</Label>
+                  <Select value={month} onValueChange={(val) => setMonth(val)}>
+                    <SelectTrigger>
+                      <SelectValue placeholder="Month" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      {months.map((m) => (
+                        <SelectItem value={m} key={m}>
+                          {m}
+                        </SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
                 </div>
-                <div className="w-full md:w-1/2 lg:w-1/2 xl:w-1/2 flex justify-center items-center pt-5 bg-gray-100">
-                  <div className="w-[150px] bg-gray-100">Month:</div>
-                  <select
-                    className="w-[150px] py-1 px-3 border rounded focus:outline-none bg-white border-black"
-                    value={month}
-                    onChange={(e) => setMonth(e.target.value)}
-                  >
-                    {months.map((m) => (
-                      <option key={m} value={m}>
-                        {m}
-                      </option>
-                    ))}
-                  </select>
-                </div>
-                <div className="w-full md:w-1/2 lg:w-1/2 xl:w-1/2 flex justify-center items-center pt-5 bg-gray-100">
-                  <div className="w-[150px] bg-gray-100">Travelers:</div>
-                  <input
-                    className="w-[150px] py-1 px-3 border rounded focus:outline-none bg-white border-black"
-                    type="text"
-                    placeholder="2"
-                    //value={}
-                    //onChange={}
-                  />
-                </div>
-              </>
-            ) : (
+              </div>
+            </TabsContent>
+            <TabsContent value="destination">
               <>
                 <div className="w-full md:w-1/2 lg:w-1/2 xl:w-1/2 flex justify-center items-center pt-5 bg-gray-100">
                   <div className="w-[150px] bg-gray-100">Start Location:</div>
@@ -231,32 +223,27 @@ const TravelPlanner = () => {
                   </select>
                 </div>
               </>
-            )}
-          </div>
-          <div className="flex flex-wrap border-x border-b rounded-b border-black pb-5 bg-gray-100">
-            <div className="w-full md:w-1/2 lg:w-1/2 xl:w-1/2 flex justify-center items-center pt-5 bg-gray-100">
-              <div className="w-[150px] bg-gray-100">Access Code:</div>
-              <input
-                className="w-[150px] py-1 px-3 border rounded focus:outline-none bg-white border-black"
-                type="password"
-                placeholder="Code"
-                value={accessCode}
-                onChange={(e) => setAccessCode(e.target.value)}
-              />
+            </TabsContent>
+            <div className="mt-3 grid gap-3">
+              <div className="grid w-full max-w-sm items-center gap-1.5">
+                <Label htmlFor="destination">Access Code</Label>
+                <Input
+                  type="password"
+                  placeholder="Code"
+                  value={accessCode}
+                  onChange={(e) => setAccessCode(e.target.value)}
+                />
+              </div>
+              <div className="w-full flex justify-center items-center">
+                <Button onClick={submit} disabled={loading} variant="default">
+                  Submit
+                </Button>
+                {loading && <Spinner height={40} width={40} />}
+              </div>
+
+              {error && <span className="text-red-500">{error}</span>}
             </div>
-            <div className="w-full md:w-1/2  lg:w-1/2 xl:w-1/2 flex justify-center items-center pt-5 bg-gray-100">
-              <button
-                className="btn-primary"
-                type="button"
-                onClick={() => submit()}
-                disabled={loading}
-              >
-                Submit
-              </button>
-              {loading && <Spinner height={40} width={40} />}
-            </div>
-            {error && <span className="text-red-500">{error}</span>}
-          </div>
+          </Tabs>
         </div>
         {loading && (
           <div className="mx-auto w-3/12 h-3/12 ">

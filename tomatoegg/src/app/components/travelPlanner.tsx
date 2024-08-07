@@ -261,6 +261,7 @@ const TravelPlanner = () => {
                   </TooltipProvider>
                 </div>
                 <Input
+                  // @ts-ignore
                   style={{ WebkitTextSecurity: "disc" }}
                   autoComplete="off"
                   type="text"

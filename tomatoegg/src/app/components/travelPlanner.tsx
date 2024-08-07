@@ -17,6 +17,9 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+
 import { Button } from "@/components/ui/button";
 
 const months = [
@@ -64,18 +67,18 @@ const TravelPlanner = () => {
 
   const submit = () => {
     setError("");
-    setActivities([]);
-    setDestinations([]);
     if (selectKnownLocation) {
       if (!destination || !month) {
         setError("Missing parameters");
       } else {
+        setActivities([]);
         fetchKnownLocation();
       }
     } else {
       if (!startLocation || !travelType || !month) {
         setError("Missing parameters");
       } else {
+        setDestinations([]);
         fetchUnknownLocation();
       }
     }
@@ -86,7 +89,7 @@ const TravelPlanner = () => {
       setLoading(true);
       const response = await axios
         .get(
-          `http://localhost:8000/travel/known?endLocation=${destination}&month=${month}`,
+          `https://tomatoegg-backend.onrender.com/travel/known?endLocation=${destination}&month=${month}`,
           { headers: { Authorization: accessCode } }
         )
         .finally(() => setLoading(false));
@@ -108,7 +111,7 @@ const TravelPlanner = () => {
       setLoading(true);
       const response = await axios
         .get(
-          `http://localhost:8000/travel/unknown?startLocation=${startLocation}&type=${travelType}&month=${month}`,
+          `https://tomatoegg-backend.onrender.com/travel/unknown?startLocation=${startLocation}&type=${travelType}&month=${month}`,
           { headers: { Authorization: accessCode } }
         )
         .finally(() => setLoading(false));
@@ -183,52 +186,58 @@ const TravelPlanner = () => {
               </div>
             </TabsContent>
             <TabsContent value="destination">
-              <>
-                <div className="w-full md:w-1/2 lg:w-1/2 xl:w-1/2 flex justify-center items-center pt-5 bg-gray-100">
-                  <div className="w-[150px] bg-gray-100">Start Location:</div>
-                  <input
-                    className="w-[150px] py-1 px-3 border rounded focus:outline-none bg-white border-black"
+              <div className="grid gap-3">
+                <div className="grid w-full max-w-sm items-center gap-1.5">
+                  <Label htmlFor="destination">Start Location</Label>
+                  <Input
                     type="text"
                     placeholder="Seattle"
                     value={startLocation}
                     onChange={(e) => setStartLocation(e.target.value)}
                   />
                 </div>
-                <div className="w-full md:w-1/2 lg:w-1/2 xl:w-1/2 flex justify-center items-center pt-5 bg-gray-100">
-                  <div className="w-[150px] bg-gray-100">Month:</div>
-                  <select
-                    className="w-[150px] py-1 px-3 border rounded focus:outline-none bg-white border-black"
-                    value={month}
-                    onChange={(e) => setMonth(e.target.value)}
-                  >
-                    {months.map((m) => (
-                      <option key={m} value={m}>
-                        {m}
-                      </option>
-                    ))}
-                  </select>
+                <div className="grid w-full max-w-sm items-center gap-1.5">
+                  <Label htmlFor="month">Month</Label>
+                  <Select value={month} onValueChange={(val) => setMonth(val)}>
+                    <SelectTrigger>
+                      <SelectValue />
+                    </SelectTrigger>
+                    <SelectContent>
+                      {months.map((m) => (
+                        <SelectItem value={m} key={m}>
+                          {m}
+                        </SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
                 </div>
-                <div className="w-full md:w-1/2 lg:w-1/2 xl:w-1/2 flex justify-center items-center pt-5 bg-gray-100">
-                  <div className="w-[150px] bg-gray-100">Trip Type:</div>
-                  <select
-                    className="w-[150px] py-1 px-3 border rounded focus:outline-none bg-white border-black"
+                <div className="grid w-full max-w-sm items-center gap-1.5">
+                  <Label htmlFor="month">Trip Type</Label>
+                  <Select
                     value={travelType}
-                    onChange={(e) => setTravelType(e.target.value)}
+                    onValueChange={(e) => setTravelType(e)}
                   >
-                    {tripTypes.map((type) => (
-                      <option key={type.value} value={type.value}>
-                        {type.label}
-                      </option>
-                    ))}
-                  </select>
+                    <SelectTrigger>
+                      <SelectValue />
+                    </SelectTrigger>
+                    <SelectContent>
+                      {tripTypes.map((type) => (
+                        <SelectItem key={type.value} value={type.value}>
+                          {type.label}
+                        </SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
                 </div>
-              </>
+              </div>
             </TabsContent>
             <div className="mt-3 grid gap-3">
               <div className="grid w-full max-w-sm items-center gap-1.5">
                 <Label htmlFor="destination">Access Code</Label>
                 <Input
-                  type="password"
+                  style={{ WebkitTextSecurity: "disc" }}
+                  autoComplete="off"
+                  type="text"
                   placeholder="Code"
                   value={accessCode}
                   onChange={(e) => setAccessCode(e.target.value)}
@@ -244,57 +253,67 @@ const TravelPlanner = () => {
               {error && <span className="text-red-500">{error}</span>}
             </div>
           </Tabs>
+          {loading && (
+            <div className="mx-auto w-3/12 h-3/12 ">
+              <AirplaneImage />
+            </div>
+          )}
+          {activities?.length > 0 && selectKnownLocation && (
+            <Card className="max-w-7xl mt-3">
+              <CardHeader>
+                <CardTitle>Results</CardTitle>
+              </CardHeader>
+              <CardContent className="grid gap-8">
+                <div className="grid gap-10">
+                  {activities.map((activity: any) => {
+                    return (
+                      <div key={activity.id} className="grid grid-cols-2 gap-4">
+                        <div className="grid gap-1">
+                          <p className="font-medium">{activity.title}</p>
+                          <p className="text-sm text-muted-foreground">
+                            {activity.type}
+                          </p>
+                          <p className="text-sm text-muted-foreground">
+                            {activity.address}
+                          </p>
+                        </div>
+                        <div className="text-sm text-muted-foreground">
+                          {activity.description}
+                        </div>
+                      </div>
+                    );
+                  })}
+                </div>
+              </CardContent>
+            </Card>
+          )}
+          {destinations?.length > 0 && !selectKnownLocation && (
+            <Card className="max-w-7xl mt-3">
+              <CardHeader>
+                <CardTitle>Results</CardTitle>
+              </CardHeader>
+              <CardContent className="grid gap-8">
+                <div className="grid gap-10">
+                  {destinations.map((destination: any) => {
+                    return (
+                      <div
+                        key={destination.id}
+                        className="grid grid-cols-1 gap-4"
+                      >
+                        <div className="grid gap-1">
+                          <p className="font-medium">{destination.location}</p>
+                          <p className="text-sm text-muted-foreground">
+                            {destination.description}
+                          </p>
+                        </div>
+                      </div>
+                    );
+                  })}
+                </div>
+              </CardContent>
+            </Card>
+          )}
         </div>
-        {loading && (
-          <div className="mx-auto w-3/12 h-3/12 ">
-            <AirplaneImage />
-          </div>
-        )}
-        {activities && (
-          <div className="w-full">
-            {/*<pre>{JSON.stringify(response, null, 2)}</pre>*/}
-            {activities.map((activitie: any) => {
-              return (
-                <div
-                  className="flex flex-col border border-black rounded mx-8 mt-5 p-3 bg-gray-300"
-                  key={activitie.id}
-                >
-                  <div className="bg-gray-300 mt-1 flex w-full justify-between">
-                    <div className="bg-gray-300 font-bold">
-                      {activitie.title}
-                    </div>
-                    <div className="bg-gray-300">{activitie.type}</div>
-                  </div>
-                  <div className="bg-gray-300 mt-1">{activitie.address}</div>
-                  <div className="bg-gray-300 mt-5">
-                    {activitie.description}
-                  </div>
-                </div>
-              );
-            })}
-          </div>
-        )}
-        {destinations && (
-          <div className="w-full">
-            {destinations.map((destination: any) => {
-              return (
-                <div
-                  className="flex flex-col border border-black rounded mx-8 mt-5 p-3 bg-gray-300"
-                  key={destination.id}
-                >
-                  <div className="bg-gray-300 mt-1 flex w-full">
-                    <div className="bg-gray-300 font-bold">
-                      {destination.location}
-                    </div>
-                  </div>
-                  <div className="bg-gray-300 mt-3">
-                    {destination.description}
-                  </div>
-                </div>
-              );
-            })}
-          </div>
-        )}
       </main>
     </div>
   );

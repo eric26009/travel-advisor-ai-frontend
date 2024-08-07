@@ -3,7 +3,6 @@
 import React from "react";
 import { Button } from "@/components/ui/button";
 import { useRouter } from "next/navigation";
-import SuitCase from "./components/suitCaseSvg";
 import Link from "next/link";
 
 export default function Home() {

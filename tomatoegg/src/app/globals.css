@@ -79,6 +79,9 @@
     @apply bg-gray-100 inline-block py-2 px-4 w-full border-black border rounded-tl rounded-tr border-b-[#F3F4F6];
   }
   .homepage {
-    @apply flex flex-col items-center justify-center text-white mt-9;
+    @apply flex flex-col items-center justify-center text-white mt-9 text-center;
+  }
+  .container {
+    @apply flex flex-col items-center justify-center p-4;
   }
 }

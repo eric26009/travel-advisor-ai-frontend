@@ -1,9 +1,11 @@
 "use client";
 import axios from "axios";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Spinner } from "./spinner/Spinner";
 import AirplaneImage from "./airplaneImage";
 import "./index.css";
+import { useRouter, useSearchParams } from "next/navigation";
+import Link from "next/link";
 
 const months = [
   "January",
@@ -27,7 +29,13 @@ const tripTypes = [
 ];
 
 const TravelPlanner = () => {
-  const [selectKnownLocation, setSelectKnownLocation] = useState(true);
+  const params = useSearchParams();
+  const router = useRouter();
+  const paramType = params.get("type");
+
+  const [selectKnownLocation, setSelectKnownLocation] = useState(
+    paramType === "activity" ? true : false
+  );
   const [destination, setDestination] = useState("");
   const [startLocation, setStartLocation] = useState("");
   const [travelType, setTravelType] = useState("roadtrip");
@@ -38,13 +46,9 @@ const TravelPlanner = () => {
   const [destinations, setDestinations] = useState([]);
   const [loading, setLoading] = useState(false);
 
-  const handleLocationClick = (value: boolean) => {
-    setSelectKnownLocation(value);
-    // setDestination("");
-    // setStartLocation("");
-    // setTravelType("");
-    // setMonth("");
-  };
+  useEffect(() => {
+    setSelectKnownLocation(paramType === "activity" ? true : false);
+  }, [paramType]);
 
   const submit = () => {
     setError("");
@@ -118,20 +122,24 @@ const TravelPlanner = () => {
         <div className="flex flex-col w-full px-8">
           <div className="flex border-b">
             <div className="-mb-px mr-1 w-full">
-              <button
+              <Link
                 className={selectKnownLocation ? "tab-active" : "tab-inactive"}
-                onClick={() => handleLocationClick(true)}
+                href={{
+                  query: { type: "activity" },
+                }}
               >
                 Known Location
-              </button>
+              </Link>
             </div>
             <div className="-mb-px w-full">
-              <button
+              <Link
                 className={selectKnownLocation ? "tab-inactive" : "tab-active"}
-                onClick={() => handleLocationClick(false)}
+                href={{
+                  query: { type: "destination" },
+                }}
               >
                 Unknown Location
-              </button>
+              </Link>
             </div>
           </div>
           <div className="flex flex-wrap border-x border-black">

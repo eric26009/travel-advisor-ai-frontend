@@ -4,6 +4,7 @@ import React from "react";
 import { Button } from "@/components/ui/button";
 import { useRouter } from "next/navigation";
 import SuitCase from "./components/suitCaseSvg";
+import Link from "next/link";
 
 export default function Home() {
   const router = useRouter();
@@ -14,16 +15,16 @@ export default function Home() {
           Plan your next trip using our state of the art AI travel advisor
         </h1>
 
-        <Button
-          onClick={() => router.push("/discover")}
-          variant="outline"
-          className="border-indigo-400"
-        >
-          Discover your next adventure
+        <Button asChild variant="default">
+          <Link
+            href={{
+              pathname: "/explorer",
+              query: { type: "activity" },
+            }}
+          >
+            Discover your next adventure
+          </Link>
         </Button>
-        <div className="mx-auto">
-          <SuitCase />
-        </div>
       </div>
     </main>
   );

@@ -158,7 +158,7 @@ const TravelPlanner = () => {
                   <SelectValue placeholder="Month" />
                 </SelectTrigger>
                 <SelectContent>
-                  <SelectGroup>
+                  <SelectGroup className="max-h-[200px]">
                     <SelectLabel>Months</SelectLabel>
                     {months.map((m) => (
                       <SelectItem value={m} key={m}>
@@ -189,7 +189,7 @@ const TravelPlanner = () => {
                   <SelectValue />
                 </SelectTrigger>
                 <SelectContent>
-                  <SelectGroup>
+                  <SelectGroup className="max-h-[200px]">
                     <SelectLabel>Months</SelectLabel>
                     {months.map((m) => (
                       <SelectItem value={m} key={m}>

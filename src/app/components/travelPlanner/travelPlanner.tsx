@@ -13,7 +13,9 @@ import { Label } from "@/components/ui/label";
 import {
   Select,
   SelectContent,
+  SelectGroup,
   SelectItem,
+  SelectLabel,
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
@@ -156,11 +158,14 @@ const TravelPlanner = () => {
                   <SelectValue placeholder="Month" />
                 </SelectTrigger>
                 <SelectContent>
-                  {months.map((m) => (
-                    <SelectItem value={m} key={m}>
-                      {m}
-                    </SelectItem>
-                  ))}
+                  <SelectGroup>
+                    <SelectLabel>Months</SelectLabel>
+                    {months.map((m) => (
+                      <SelectItem value={m} key={m}>
+                        {m}
+                      </SelectItem>
+                    ))}
+                  </SelectGroup>
                 </SelectContent>
               </Select>
             </div>
@@ -184,11 +189,14 @@ const TravelPlanner = () => {
                   <SelectValue />
                 </SelectTrigger>
                 <SelectContent>
-                  {months.map((m) => (
-                    <SelectItem value={m} key={m}>
-                      {m}
-                    </SelectItem>
-                  ))}
+                  <SelectGroup>
+                    <SelectLabel>Months</SelectLabel>
+                    {months.map((m) => (
+                      <SelectItem value={m} key={m}>
+                        {m}
+                      </SelectItem>
+                    ))}
+                  </SelectGroup>
                 </SelectContent>
               </Select>
             </div>

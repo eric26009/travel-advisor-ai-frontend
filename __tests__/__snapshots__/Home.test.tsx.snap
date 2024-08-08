@@ -1,0 +1,21 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Home Page should have welcome text 1`] = `
+<div>
+  <div
+    class="container homepage gap-9"
+  >
+    <h1
+      class="text-[2rem] bg-gradient-to-r from-blue-600 via-green-500 to-indigo-400 inline-block text-transparent bg-clip-text"
+    >
+      Plan your next trip using our state of the art AI travel advisor
+    </h1>
+    <a
+      class="inline-flex items-center justify-center whitespace-nowrap rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 bg-primary text-primary-foreground hover:bg-primary/90 h-10 px-4 py-2"
+      href="/explorer?type=activity"
+    >
+      Discover your next adventure
+    </a>
+  </div>
+</div>
+`;

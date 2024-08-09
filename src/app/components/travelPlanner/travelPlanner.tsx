@@ -1,37 +1,24 @@
 "use client";
 
 import React, { useEffect, useState } from "react";
-import { Spinner } from "../spinner/Spinner";
 import AirplaneImage from "../airplaneImage";
 import "../index.css";
 import { useSearchParams } from "next/navigation";
 import Link from "next/link";
 
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
-import {
-  Select,
-  SelectContent,
-  SelectGroup,
-  SelectItem,
-  SelectLabel,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
 
-import { Button } from "@/components/ui/button";
-import {
-  Tooltip,
-  TooltipContent,
-  TooltipProvider,
-  TooltipTrigger,
-} from "@/components/ui/tooltip";
+import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
+
 import { Activity, Destination } from "../../types";
 import axios from "axios";
-import { months, tripTypes } from "../../constants";
 import { DestinationsCard } from "./DestinationsCard";
 import { ActivitiesCard } from "./ActivitiesCard";
+import { z } from "zod";
+
+import { AlertCircle } from "lucide-react";
+import DestinationForm, { destinationSchema } from "./DestinationForm";
+import ActivityForm, { activitySchema } from "./ActivityForm";
 
 const TravelPlanner = () => {
   const params = useSearchParams();
@@ -40,40 +27,29 @@ const TravelPlanner = () => {
   const [selectKnownLocation, setSelectKnownLocation] = useState(
     paramType === "activity" ? true : false
   );
-  const [destination, setDestination] = useState("");
-  const [startLocation, setStartLocation] = useState("");
-  const [travelType, setTravelType] = useState("roadtrip");
-  const [month, setMonth] = useState("January");
-  const [accessCode, setAccessCode] = useState("");
   const [error, setError] = useState("");
   const [activities, setActivities] = useState<Activity[]>([]);
   const [destinations, setDestinations] = useState<Destination[]>([]);
   const [loading, setLoading] = useState(false);
 
+  const submitDestinationForm = (values: z.infer<typeof destinationSchema>) => {
+    setDestinations([]);
+    setError("");
+    fetchUnknownLocation(values);
+  };
+
+  const submitActivityForm = (values: z.infer<typeof activitySchema>) => {
+    setActivities([]);
+    setError("");
+    fetchKnownLocation(values);
+  };
+
   useEffect(() => {
     setSelectKnownLocation(paramType === "activity" ? true : false);
   }, [paramType]);
 
-  const submit = () => {
-    setError("");
-    if (selectKnownLocation) {
-      if (!destination || !month) {
-        setError("Missing parameters");
-      } else {
-        setActivities([]);
-        fetchKnownLocation();
-      }
-    } else {
-      if (!startLocation || !travelType || !month) {
-        setError("Missing parameters");
-      } else {
-        setDestinations([]);
-        fetchUnknownLocation();
-      }
-    }
-  };
-
-  const fetchKnownLocation = async () => {
+  const fetchKnownLocation = async (values: z.infer<typeof activitySchema>) => {
+    const { destination, month, accessCode } = values;
     try {
       setLoading(true);
       const response = await axios
@@ -93,7 +69,10 @@ const TravelPlanner = () => {
     }
   };
 
-  const fetchUnknownLocation = async () => {
+  const fetchUnknownLocation = async (
+    values: z.infer<typeof destinationSchema>
+  ) => {
+    const { startLocation, travelType, month, accessCode } = values;
     try {
       setLoading(true);
       const response = await axios
@@ -118,9 +97,9 @@ const TravelPlanner = () => {
     <div className="container">
       <Tabs
         value={selectKnownLocation ? "activity" : "destination"}
-        className="max-w-[500px]"
+        className="max-w-[500px] flex flex-col"
       >
-        <TabsList>
+        <TabsList className="self-center">
           <TabsTrigger asChild value="activity">
             <Link
               href={{
@@ -141,131 +120,27 @@ const TravelPlanner = () => {
           </TabsTrigger>
         </TabsList>
         <TabsContent value="activity">
-          <div className="grid gap-3">
-            <div className="grid w-full max-w-sm items-center gap-1.5">
-              <Label htmlFor="destination">Destination</Label>
-              <Input
-                type="text"
-                placeholder="Seattle"
-                value={destination}
-                onChange={(e) => setDestination(e.target.value)}
-              />
-            </div>
-            <div className="grid w-full max-w-sm items-center gap-1.5">
-              <Label htmlFor="month">Month</Label>
-              <Select value={month} onValueChange={(val) => setMonth(val)}>
-                <SelectTrigger>
-                  <SelectValue placeholder="Month" />
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectGroup className="max-h-[200px]">
-                    <SelectLabel>Months</SelectLabel>
-                    {months.map((m) => (
-                      <SelectItem value={m} key={m}>
-                        {m}
-                      </SelectItem>
-                    ))}
-                  </SelectGroup>
-                </SelectContent>
-              </Select>
-            </div>
-          </div>
+          <ActivityForm
+            submitActivityForm={submitActivityForm}
+            loading={loading}
+          />
         </TabsContent>
         <TabsContent value="destination">
-          <div className="grid gap-3">
-            <div className="grid w-full max-w-sm items-center gap-1.5">
-              <Label htmlFor="destination">Start Location</Label>
-              <Input
-                type="text"
-                placeholder="Seattle"
-                value={startLocation}
-                onChange={(e) => setStartLocation(e.target.value)}
-              />
-            </div>
-            <div className="grid w-full max-w-sm items-center gap-1.5">
-              <Label htmlFor="month">Month</Label>
-              <Select value={month} onValueChange={(val) => setMonth(val)}>
-                <SelectTrigger>
-                  <SelectValue />
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectGroup className="max-h-[200px]">
-                    <SelectLabel>Months</SelectLabel>
-                    {months.map((m) => (
-                      <SelectItem value={m} key={m}>
-                        {m}
-                      </SelectItem>
-                    ))}
-                  </SelectGroup>
-                </SelectContent>
-              </Select>
-            </div>
-            <div className="grid w-full max-w-sm items-center gap-1.5">
-              <Label htmlFor="month">Trip Type</Label>
-              <Select
-                value={travelType}
-                onValueChange={(e) => setTravelType(e)}
-              >
-                <SelectTrigger>
-                  <SelectValue />
-                </SelectTrigger>
-                <SelectContent>
-                  {tripTypes.map((type) => (
-                    <SelectItem key={type.value} value={type.value}>
-                      {type.label}
-                    </SelectItem>
-                  ))}
-                </SelectContent>
-              </Select>
-            </div>
-          </div>
+          <DestinationForm
+            submitDestinationForm={submitDestinationForm}
+            loading={loading}
+          />
         </TabsContent>
-        <div className="mt-3 grid gap-3">
-          <div className="grid w-full max-w-sm items-center gap-1.5">
-            <div className="flex justify-start items-center gap-2">
-              <Label htmlFor="destination">Access Code</Label>
-              <TooltipProvider>
-                <Tooltip delayDuration={200}>
-                  <TooltipTrigger>
-                    <i className="fa-regular fa-circle-question"></i>
-                  </TooltipTrigger>
-                  <TooltipContent side="bottom" avoidCollisions>
-                    <p>
-                      If you do not have an access code, send a message to{" "}
-                      <a
-                        href="https://www.linkedin.com/in/feldmaneric"
-                        target="_blank"
-                        className="font-bold hover:underline"
-                      >
-                        Eric Feldman
-                      </a>
-                    </p>
-                  </TooltipContent>
-                </Tooltip>
-              </TooltipProvider>
-            </div>
-            <Input
-              // @ts-ignore
-              style={{ WebkitTextSecurity: "disc" }}
-              autoComplete="off"
-              type="text"
-              placeholder="Code"
-              value={accessCode}
-              onChange={(e) => setAccessCode(e.target.value)}
-            />
-          </div>
-          <div className="w-full flex justify-center items-center">
-            <Button onClick={submit} disabled={loading} variant="default">
-              Submit
-            </Button>
-            {loading && <Spinner height={40} width={40} />}
-          </div>
-
-          {error && <span className="text-red-500">{error}</span>}
-        </div>
+        {error && (
+          <Alert variant="destructive" className="mt-3">
+            <AlertCircle className="h-4 w-4" />
+            <AlertTitle>Error</AlertTitle>
+            <AlertDescription>{error}</AlertDescription>
+          </Alert>
+        )}
       </Tabs>
       {loading && (
-        <div className="mx-auto w-3/12 h-3/12 ">
+        <div className="mx-auto w-64 h-64">
           <AirplaneImage />
         </div>
       )}

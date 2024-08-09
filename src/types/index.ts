@@ -20,3 +20,5 @@ export interface Activity {
 export interface ActivityResponse {
   activities: Activity[];
 }
+
+export type ExplorerType = "activity" | "destination";

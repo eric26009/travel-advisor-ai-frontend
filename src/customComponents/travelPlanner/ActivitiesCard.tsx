@@ -1,14 +1,14 @@
-import { Activity } from "@/types";
+import { Activity, ExplorerType } from "@/types";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import React from "react";
 
 interface Props {
   activities: Activity[];
-  selectKnownLocation: boolean;
+  explorerType: ExplorerType;
 }
 
-export const ActivitiesCard = ({ activities, selectKnownLocation }: Props) => {
-  return activities?.length > 0 && selectKnownLocation ? (
+export const ActivitiesCard = ({ activities, explorerType }: Props) => {
+  return activities?.length > 0 && explorerType === "activity" ? (
     <Card className="max-w-7xl mt-3">
       <CardHeader>
         <CardTitle>Results</CardTitle>

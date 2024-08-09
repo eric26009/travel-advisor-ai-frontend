@@ -10,7 +10,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 
-import { Activity, Destination } from "../../types";
+import { Activity, Destination, ExplorerType } from "../../types";
 import axios from "axios";
 import { DestinationsCard } from "./DestinationsCard";
 import { ActivitiesCard } from "./ActivitiesCard";
@@ -22,11 +22,9 @@ import ActivityForm, { activitySchema } from "./ActivityForm";
 
 const TravelPlanner = () => {
   const params = useSearchParams();
-  const paramType = params.get("type");
+  const paramType = params.get("type") as ExplorerType;
 
-  const [selectKnownLocation, setSelectKnownLocation] = useState(
-    paramType === "activity" ? true : false
-  );
+  const [explorerType, setExplorerType] = useState<ExplorerType>("activity");
   const [error, setError] = useState("");
   const [activities, setActivities] = useState<Activity[]>([]);
   const [destinations, setDestinations] = useState<Destination[]>([]);
@@ -35,20 +33,20 @@ const TravelPlanner = () => {
   const submitDestinationForm = (values: z.infer<typeof destinationSchema>) => {
     setDestinations([]);
     setError("");
-    fetchUnknownLocation(values);
+    fetchDestinations(values);
   };
 
   const submitActivityForm = (values: z.infer<typeof activitySchema>) => {
     setActivities([]);
     setError("");
-    fetchKnownLocation(values);
+    fetchActivities(values);
   };
 
   useEffect(() => {
-    setSelectKnownLocation(paramType === "activity" ? true : false);
+    setExplorerType(paramType);
   }, [paramType]);
 
-  const fetchKnownLocation = async (values: z.infer<typeof activitySchema>) => {
+  const fetchActivities = async (values: z.infer<typeof activitySchema>) => {
     const { destination, month, accessCode } = values;
     try {
       setLoading(true);
@@ -69,7 +67,7 @@ const TravelPlanner = () => {
     }
   };
 
-  const fetchUnknownLocation = async (
+  const fetchDestinations = async (
     values: z.infer<typeof destinationSchema>
   ) => {
     const { startLocation, travelType, month, accessCode } = values;
@@ -95,10 +93,7 @@ const TravelPlanner = () => {
 
   return (
     <div className="container">
-      <Tabs
-        value={selectKnownLocation ? "activity" : "destination"}
-        className="max-w-[500px] flex flex-col"
-      >
+      <Tabs value={explorerType} className="max-w-[500px] flex flex-col">
         <TabsList className="self-center">
           <TabsTrigger asChild value="activity">
             <Link
@@ -144,13 +139,10 @@ const TravelPlanner = () => {
           <AirplaneImage />
         </div>
       )}
-      <ActivitiesCard
-        activities={activities}
-        selectKnownLocation={selectKnownLocation}
-      />
+      <ActivitiesCard activities={activities} explorerType={explorerType} />
       <DestinationsCard
         destinations={destinations}
-        selectKnownLocation={selectKnownLocation}
+        explorerType={explorerType}
       />
     </div>
   );

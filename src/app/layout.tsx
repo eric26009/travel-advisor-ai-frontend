@@ -1,9 +1,10 @@
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import "./globals.css";
-import { Navbar, Footer } from "./components";
+
 import Script from "next/script";
 import { Suspense } from "react";
+import { Navbar } from "@/customComponents";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -27,7 +28,6 @@ export default function RootLayout({
         <Suspense fallback={<div>Loading...</div>}>
           <Navbar />
           {children}
-          {/* <Footer /> */}
         </Suspense>
       </body>
     </html>

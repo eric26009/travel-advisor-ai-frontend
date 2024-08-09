@@ -28,47 +28,45 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { months, tripTypes } from "@/app/constants";
+import { months } from "@/constants";
 
-export const destinationSchema = z.object({
-  startLocation: z.string().min(1, { message: "Start Location is required" }),
+export const activitySchema = z.object({
+  destination: z.string().min(1, { message: "Destination is required" }),
   month: z.string().min(1, { message: "Month is required" }),
-  travelType: z.string().min(1, { message: "Trip Type is required" }),
   accessCode: z.string().min(1, { message: "Access Code is required" }),
 });
 
 interface Props {
-  submitDestinationForm: (values: z.infer<typeof destinationSchema>) => void;
+  submitActivityForm: (values: z.infer<typeof activitySchema>) => void;
   loading: boolean;
 }
 
-const DestinationForm = ({ submitDestinationForm, loading }: Props) => {
-  const destinationForm = useForm<z.infer<typeof destinationSchema>>({
-    resolver: zodResolver(destinationSchema),
+const ActivityForm = ({ submitActivityForm, loading }: Props) => {
+  const activityForm = useForm<z.infer<typeof activitySchema>>({
+    resolver: zodResolver(activitySchema),
     defaultValues: {
-      startLocation: "",
+      destination: "",
       month: "January",
-      travelType: "roadtrip",
       accessCode: "",
     },
   });
 
-  const onSubmit = (values: z.infer<typeof destinationSchema>) => {
-    submitDestinationForm(values);
+  const onSubmit = (values: z.infer<typeof activitySchema>) => {
+    submitActivityForm(values);
   };
 
   return (
-    <Form {...destinationForm}>
+    <Form {...activityForm}>
       <form
-        onSubmit={destinationForm.handleSubmit(onSubmit)}
+        onSubmit={activityForm.handleSubmit(onSubmit)}
         className="grid gap-y-3"
       >
         <FormField
-          control={destinationForm.control}
-          name="startLocation"
+          control={activityForm.control}
+          name="destination"
           render={({ field }) => (
             <FormItem>
-              <FormLabel>Start Location</FormLabel>
+              <FormLabel>Destination</FormLabel>
               <FormControl>
                 <Input placeholder="Seattle" {...field} />
               </FormControl>
@@ -77,7 +75,7 @@ const DestinationForm = ({ submitDestinationForm, loading }: Props) => {
           )}
         />
         <FormField
-          control={destinationForm.control}
+          control={activityForm.control}
           name="month"
           render={({ field }) => (
             <FormItem>
@@ -108,38 +106,7 @@ const DestinationForm = ({ submitDestinationForm, loading }: Props) => {
           )}
         />
         <FormField
-          control={destinationForm.control}
-          name="travelType"
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel>Trip Type</FormLabel>
-              <FormControl>
-                <Select
-                  value={field.value}
-                  onValueChange={field.onChange}
-                  defaultValue={field.value}
-                >
-                  <SelectTrigger>
-                    <SelectValue />
-                  </SelectTrigger>
-                  <SelectContent>
-                    <SelectGroup className="max-h-[200px]">
-                      <SelectLabel>Trip Type</SelectLabel>
-                      {tripTypes.map((type) => (
-                        <SelectItem key={type.value} value={type.value}>
-                          {type.label}
-                        </SelectItem>
-                      ))}
-                    </SelectGroup>
-                  </SelectContent>
-                </Select>
-              </FormControl>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
-        <FormField
-          control={destinationForm.control}
+          control={activityForm.control}
           name="accessCode"
           render={({ field }) => (
             <FormItem>
@@ -184,4 +151,4 @@ const DestinationForm = ({ submitDestinationForm, loading }: Props) => {
   );
 };
 
-export default DestinationForm;
+export default ActivityForm;

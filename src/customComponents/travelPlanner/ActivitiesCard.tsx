@@ -1,4 +1,4 @@
-import { Activity } from "@/app/types";
+import { Activity } from "@/types";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import React from "react";
 

@@ -5,6 +5,7 @@ import "./globals.css";
 import Script from "next/script";
 import { Suspense } from "react";
 import { Navbar } from "@/customComponents";
+import { Analytics } from "@vercel/analytics/react";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -28,6 +29,7 @@ export default function RootLayout({
         <Suspense fallback={<div>Loading...</div>}>
           <Navbar />
           {children}
+          <Analytics />
         </Suspense>
       </body>
     </html>

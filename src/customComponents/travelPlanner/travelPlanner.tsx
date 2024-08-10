@@ -52,7 +52,7 @@ const TravelPlanner = () => {
       setLoading(true);
       const response = await axios
         .get(
-          `https://tomatoegg-backend.onrender.com/api/travel/activity?endLocation=${destination}&month=${month}`,
+          `https://tomato-egg-backend.vercel.app/api/travel/activity?endLocation=${destination}&month=${month}`,
           { headers: { Authorization: accessCode } }
         )
         .finally(() => setLoading(false));
@@ -75,7 +75,7 @@ const TravelPlanner = () => {
       setLoading(true);
       const response = await axios
         .get(
-          `http://tomatoegg-backend.onrender.com/api/travel/destination?startLocation=${startLocation}&type=${travelType}&month=${month}`,
+          `https://tomato-egg-backend.vercel.app/api/travel/destination?startLocation=${startLocation}&type=${travelType}&month=${month}`,
           { headers: { Authorization: accessCode } }
         )
         .finally(() => setLoading(false));
